@@ -1,0 +1,16 @@
+
+langchain
+langchain-core
+langchain-mistralai
+langchain-chroma
+langchain-huggingface
+chromadb
+sentence-transformers
+transformers
+torch
+pydantic
+python-dotenv
+yt-dlp
+ffmpeg-python
+openai-whisper
+
