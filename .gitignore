@@ -1,4 +1,4 @@
-<!-- filepath: c:\Users\manoh\OneDrive\Documents\genAI and AgenticAI\AIvideoAssistant\.gitignore -->
+```gitignore
 # Python
 __pycache__/
 *.py[cod]
@@ -10,23 +10,23 @@ __pycache__/
 venv/
 env/
 
-# Environment files
+# Environment variables
 .env
-.env.*
 
-# IDE files
+# Generated transcripts
+transcripts/
+
+# Downloaded audio/video files
+downloads/
+
+# Chroma vector database
+vector_db/
+
+# IDE
 .vscode/
 .idea/
 
 # OS files
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
-
-# Test / cache
-.pytest_cache/
-.mypy_cache/
-.coverage
-htmlcov/
+```
