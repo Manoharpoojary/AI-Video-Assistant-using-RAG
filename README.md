@@ -1,275 +1,78 @@
 # 🎥 AI Video Assistant
 
-An AI-powered video assistant that converts YouTube videos or local audio/video files into structured insights using Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), and vector search.
+AI-powered video analysis using **OpenAI Whisper**, Mistral AI, Hugging Face embeddings, and ChromaDB RAG.
 
-## ✨ Features
+## Features
 
-* 🎙️ Transcribes audio from YouTube videos or local files.
-* 📝 Generates an accurate summary with a concise title.
-* ✅ Extracts action items.
-* 🎯 Identifies key decisions.
-* ❓ Extracts important questions.
-* 💬 Chat with the transcript using Retrieval-Augmented Generation (RAG).
-* 📚 Stores transcript embeddings in ChromaDB for semantic retrieval.
+- YouTube URL or local audio/video upload
+- Local Whisper transcription
+- Summary and title generation
+- Action item extraction
+- Decision extraction
+- Question extraction
+- RAG-based chat with the transcript
 
----
-
-# 🛠️ Tech Stack
-
-### LLM
-
-* Mistral AI (`mistral-small-2603`)
-
-### Embeddings
-
-* Hugging Face
-* `sentence-transformers/all-MiniLM-L6-v2`
-
-### Vector Database
-
-* ChromaDB
-
-### Frameworks
-
-* LangChain
-* Pydantic
-
-### Audio Processing
-
-* FFmpeg
-* yt-dlp
-
-### Programming Language
-
-* Python
-
----
-
-# 📂 Project Structure
+## Architecture
 
 ```text
-AIvideoAssistant/
-│
-├── core/
-│   ├── extractor.py
-│   ├── ragengine.py
-│   ├── summarize.py
-│   ├── transcriber.py
-│   └── vector_store.py
-│
-├── utils/
-│   └── audioProcessing.py
-│
-├── transcripts/
-│
-├── vector_db/
-│
-├── main.py
-├── requirements.txt
-└── README.md
+YouTube / File
+      ↓
+  yt-dlp + FFmpeg
+      ↓
+   Audio chunks
+      ↓
+OpenAI Whisper (local)
+      ↓
+   Transcript
+      ├──→ Mistral → Summary / Actions / Decisions / Questions
+      ↓
+ Hugging Face Embeddings
+      ↓
+   ChromaDB
+      ↓
+ Retriever → Mistral → Answers
 ```
 
----
-
-# ⚙️ Workflow
-
-```text
-Video / Audio
-      │
-      ▼
-Audio Processing
-      │
-      ▼
-Transcription
-      │
-      ▼
-Transcript
-      ├───────────────┐
-      ▼               │
- Summarization        │
- Action Items         │
- Decisions            │
- Questions            │
-                      ▼
-              Chunking
-                      ▼
-                 Embeddings
-                      ▼
-                  ChromaDB
-                      ▼
-                  Retriever
-                      ▼
-                  Mistral AI
-                      ▼
-              Conversational RAG
-```
-
----
-
-# 🚀 Installation
-
-Clone the repository
-
-```bash
-git clone <repository-url>
-cd AIvideoAssistant
-```
-
-Create a virtual environment
+## Local setup
 
 ```bash
 python -m venv .venv
-```
-
-Activate it
-
-Windows
-
-```bash
-.venv\Scripts\activate
-```
-
-Linux / macOS
-
-```bash
+# Windows
+.venv\\Scripts\\activate
+# Linux/macOS
 source .venv/bin/activate
-```
-
-Install dependencies
-
-```bash
 pip install -r requirements.txt
 ```
 
----
+Install **FFmpeg** and make sure the `ffmpeg` executable is on PATH.
 
-# 🔑 Environment Variables
-
-Create a `.env` file in the project root.
+Create `.env`:
 
 ```env
 MISTRAL_API_KEY=your_mistral_api_key
+WHISPER_MODEL=small
 ```
 
----
-
-# ▶️ Running the Project
+Run the web app:
 
 ```bash
-python main.py
+uvicorn app:app --reload
 ```
 
-or
+Open `http://localhost:8000`.
 
-```bash
-uv run python main.py
-```
+## Render deployment
 
-Enter either
+This repository includes a `Dockerfile` and `render.yaml`.
 
-* A YouTube URL
-* A local audio/video file path
+1. Create a Render account.
+2. Create a new **Blueprint** from this GitHub repository.
+3. Set `MISTRAL_API_KEY` in the Render environment variables.
+4. Deploy.
+5. Open the generated Render URL.
 
-Example
+`WHISPER_MODEL=small` keeps the current project behavior. For a smaller/faster deployment, this can be changed to another Whisper model through the environment variable.
 
-```text
-Enter YouTube URL or local file path:
-https://www.youtube.com/watch?v=xxxxxxxx
-```
+## Important deployment note
 
----
-
-# 📌 Output
-
-The assistant generates:
-
-* Video Title
-* Summary
-* Action Items
-* Key Decisions
-* Questions
-
-Example
-
-```text
-📌 TITLE
-
-Retrieval-Augmented Generation
-
-📝 SUMMARY
-
-...
-
-✅ ACTION ITEMS
-
-• Build the retriever
-• Update the documentation
-
-🎯 KEY DECISIONS
-
-• Use ChromaDB
-
-❓ QUESTIONS
-
-• Should we use hybrid search?
-```
-
----
-
-# 💬 Chat with the Transcript
-
-After processing, ask natural language questions such as:
-
-```text
-Who was assigned the deployment?
-
-What was the final decision?
-
-What deadline was discussed?
-
-Summarize the discussion about RAG.
-
-Who asked about vector databases?
-```
-
-The assistant retrieves relevant transcript chunks using ChromaDB and answers using Mistral AI.
-
----
-
-# 📚 Technologies Used
-
-* Python
-* LangChain
-* Mistral AI
-* Hugging Face Embeddings
-* ChromaDB
-* Pydantic
-* Recursive Character Text Splitter
-* Retrieval-Augmented Generation (RAG)
-
----
-
-# 🔮 Future Improvements
-
-* Streaming responses
-* Conversation memory for follow-up questions
-* Speaker diarization
-* Multilingual transcription
-* Hybrid retrieval (keyword + vector search)
-* Web interface (Streamlit/FastAPI)
-* PDF, DOCX, and Markdown export
-* Meeting analytics and timeline generation
-
----
-
-<!-- # 👨‍💻 Author
-
-**Manohar Poojary**
-
-Built as a Generative AI project to demonstrate:
-
-* LLM Applications
-* Retrieval-Augmented Generation (RAG)
-* Vector Databases
-* LangChain
-* AI-powered Transcript Analysis -->
+Whisper inference and local Hugging Face embeddings require CPU and memory. Processing time depends heavily on the video duration and selected Whisper model. Chroma data is created per processing session in temporary storage rather than relying on repository files.

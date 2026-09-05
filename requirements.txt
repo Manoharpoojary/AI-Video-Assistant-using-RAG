@@ -1,4 +1,6 @@
-
+fastapi
+uvicorn[standard]
+python-multipart
 langchain
 langchain-core
 langchain-mistralai
@@ -11,6 +13,5 @@ torch
 pydantic
 python-dotenv
 yt-dlp
-ffmpeg-python
+pydub
 openai-whisper
-

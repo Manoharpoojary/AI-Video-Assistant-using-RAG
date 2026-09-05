@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ai-video-assistant
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: WHISPER_MODEL
+        value: small

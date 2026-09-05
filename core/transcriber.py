@@ -1,7 +1,5 @@
-import os
-from pathlib import Path
-
 import whisper
+import os
 
 WHISPER_MODEL = os.getenv("WHISPER_MODEL", "small")
 _model = None
@@ -12,31 +10,19 @@ def load_model():
     if _model is None:
         print(f"Loading Whisper model: {WHISPER_MODEL}")
         _model = whisper.load_model(WHISPER_MODEL)
-        print("Whisper model loaded successfully")
     return _model
 
 
 def transcribe_chunk_whisper(chunk_path: str, translate: bool = False) -> str:
-    model = load_model()
     task = "translate" if translate else "transcribe"
-    result = model.transcribe(chunk_path, task=task)
-    return result["text"].strip()
+    return load_model().transcribe(chunk_path, task=task)["text"].strip()
 
 
-def transcribe_all_whisper(chunks: list[Path], translate: bool = False) -> str:
-    full_transcript = []
+def transcribe_audio(chunks, translate: bool = False) -> str:
+    texts = []
     for i, chunk in enumerate(chunks, start=1):
         print(f"Transcribing chunk {i}/{len(chunks)}")
         text = transcribe_chunk_whisper(str(chunk), translate=translate)
         if text:
-            full_transcript.append(text)
-    print("Transcription complete")
-    return " ".join(full_transcript)
-
-
-def transcribe_audio(chunks: list[Path], translate: bool = False) -> str:
-    return transcribe_all_whisper(chunks, translate=translate)
-
-
-if __name__ == "__main__":
-    print("This module provides Whisper transcription for the AI Video Assistant.")
+            texts.append(text)
+    return " ".join(texts)
