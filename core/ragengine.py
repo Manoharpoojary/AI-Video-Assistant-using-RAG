@@ -1,14 +1,9 @@
-from langchain_mistralai import ChatMistralAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.vector_store import load_vector_store,get_retriver,build_vector_store
 from langchain_core.documents import Document
 from langchain_core.runnables import RunnableLambda,RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
-import os
-
-def get_llm():
-    model=ChatMistralAI(model_name="mistral-small-2603",temperature=0,mistral_api_key=os.getenv("MISTRAL_API_KEY"))
-    return model
+from core.llm import get_llm, invoke_with_retry
 
 def combine_docs(docs:Document):
     return "\n\n".join([i.page_content for i in docs])
@@ -55,7 +50,7 @@ def build_rag_chain(transcript:str):
     
     
 def ask_question(rag_chain,question):
-    return rag_chain.invoke(question)
+    return invoke_with_retry(rag_chain, question, operation="answering your question")
 
 if __name__=="__main__":
     with open("transcripts/transcript.txt","r",encoding="utf-8") as f:

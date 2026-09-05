@@ -46,7 +46,7 @@ def load_vector_store()->Chroma:
 def get_retriver(vector_store:Chroma,k:int=4):
     return vector_store.as_retriever(
         search_type="similarity",
-        seatch_kwargs=k
+        search_kwargs={"k": k}
     )
     
 if __name__=="__main__":

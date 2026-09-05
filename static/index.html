@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Video Assistant</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <p class="eyebrow">VIDEO INTELLIGENCE</p>
+      <h1>Turn any video into<br><em>clear, useful notes.</em></h1>
+      <p class="lede">Paste a YouTube link or a local file path. Get a summary, decisions, questions, action items, and a chat-ready transcript.</p>
+    </header>
+
+    <section class="source-card" aria-label="Video source">
+      <label for="source">Video source</label>
+      <div class="source-row">
+        <input id="source" placeholder="https://youtube.com/watch?v=… or C:\\video.mp4" autocomplete="off">
+        <button id="analyze">Analyze video <span>→</span></button>
+      </div>
+      <p id="status" class="hint">Your source stays on this machine while it is processed.</p>
+    </section>
+
+    <section id="results" class="results hidden" aria-live="polite">
+      <article class="summary-card">
+        <p class="eyebrow">VIDEO BRIEF</p>
+        <h2 id="title"></h2>
+        <p id="summary"></p>
+      </article>
+      <div class="insights">
+        <article><h3>Action items</h3><div id="actions"></div></article>
+        <article><h3>Key decisions</h3><div id="decisions"></div></article>
+        <article><h3>Questions raised</h3><div id="questions"></div></article>
+      </div>
+      <section class="chat-card">
+        <div><p class="eyebrow">ASK THE TRANSCRIPT</p><h2>Keep exploring</h2></div>
+        <div id="messages" class="messages"></div>
+        <form id="chat-form" class="chat-row">
+          <input id="question" placeholder="Ask something about the video…" required>
+          <button>Send</button>
+        </form>
+      </section>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 
 langchain
 langchain-core
-langchain-mistralai
+langchain-google-genai
 langchain-chroma
 langchain-huggingface
 chromadb
@@ -13,4 +13,6 @@ python-dotenv
 yt-dlp
 ffmpeg-python
 openai-whisper
+fastapi
+uvicorn
 

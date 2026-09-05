@@ -6,12 +6,7 @@ load_dotenv()
 from utils.audioProcessing import process_audio
 from core.transcriber import transcribe_audio
 from core.ragengine import build_rag_chain, ask_question
-from core.summarize import summarize
-from core.extractor import (
-    extract_actions,
-    extract_decisions,
-    extract_questions,
-)
+from core.summarize import analyze
 
 
 def save_transcript(transcript: str, file_name: str = "transcript") -> Path:
@@ -43,11 +38,12 @@ def run_pipeline(source: str):
     # Build RAG
     rag_chain = build_rag_chain(transcript)
 
+    analysis = analyze(transcript)
     return {
-        "summary": summarize(transcript),
-        "actions": extract_actions(transcript),
-        "questions": extract_questions(transcript),
-        "decisions": extract_decisions(transcript),
+        "summary": analysis,
+        "actions": analysis.actions,
+        "questions": analysis.questions,
+        "decisions": analysis.decisions,
         "rag_chain": rag_chain,
     }
 

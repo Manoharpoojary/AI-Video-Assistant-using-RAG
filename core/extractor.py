@@ -1,15 +1,9 @@
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_mistralai import ChatMistralAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from dotenv import load_dotenv
-import os
 load_dotenv()
-
-def get_llm():
-    model=ChatMistralAI(model_name="mistral-small-2603",temperature=0,mistral_api_key=os.getenv("MISTRAL_API_KEY"))
-    return model
-
+from core.llm import get_llm, invoke_with_retry
 
 from langchain_core.prompts import ChatPromptTemplate
 
@@ -90,12 +84,18 @@ def workflow(prompt: ChatPromptTemplate,
 
     partial_outputs = []
 
-    for chunk in chunks:
-        output = chunk_chain.invoke({"transcript": chunk})
+    for index, chunk in enumerate(chunks):
+        output = invoke_with_retry(
+            chunk_chain,
+            {"transcript": chunk},
+            operation=f"extracting information from chunk {index + 1}/{len(chunks)}",
+        )
         partial_outputs.append(output)
 
-    final_output = combine_chain.invoke(
-        {"summaries": "\n\n".join(partial_outputs)}
+    final_output = invoke_with_retry(
+        combine_chain,
+        {"summaries": "\n\n".join(partial_outputs)},
+        operation="combining extracted information",
     )
     return final_output
     
